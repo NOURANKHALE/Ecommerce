@@ -1,6 +1,7 @@
 import { getCategoryProducts } from "@/services/getproductcategory";
 import ProductClient from "@/components/products/Productlist";
 
+// ✅ Local type definition — do not import it
 type CategoryPageProps = {
   params: {
     category: string;
