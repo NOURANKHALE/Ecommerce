@@ -53,21 +53,6 @@ export default function Hero() {
     },
   };
 
-  // Background gradient animation
-  const backgroundVariants = {
-    animate: {
-      background: [
-        "linear-gradient(to bottom, hsl(0 0% 100%), hsl(240 4.8% 95.9%))",
-        "linear-gradient(to bottom, hsl(240 4.8% 95.9%), hsl(0 0% 100%))",
-        "linear-gradient(to bottom, hsl(0 0% 100%), hsl(240 4.8% 95.9%))",
-      ],
-      transition: {
-        duration: 10,
-        repeat: Infinity,
-        repeatType: "reverse",
-      },
-    },
-  };
 
   return (
     <motion.div
