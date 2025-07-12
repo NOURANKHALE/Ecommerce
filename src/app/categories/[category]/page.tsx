@@ -1,6 +1,11 @@
 import { getCategoryProducts } from "@/services/getproductcategory";
 import ProductClient from "@/components/products/Productlist";
-import { CategoryPageProps } from "@/types/Categoryprop";
+
+type CategoryPageProps = {
+  params: {
+    category: string;
+  };
+};
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = params;
