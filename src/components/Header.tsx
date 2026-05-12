@@ -4,15 +4,15 @@ import { ShoppingCart, Heart, User } from "lucide-react";
 import { SidebarTrigger } from "./ui/sidebar";
 import { ModeToggle } from "./Modetoggle";
 import { useSelector } from "react-redux";
-import { UserButton, ClerkProvider } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import { RootState } from "@/store/store";
+import { isClerkConfigured } from "@/lib/clerk-config";
 
 export default function Header() {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
 
   return (
-    <ClerkProvider>
       <header className="Header sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md">
         <div className="container mx-auto flex items-center justify-between p-4">
           <div className="flex items-center">
@@ -74,9 +74,8 @@ export default function Header() {
             </Link>
 
             <div className="flex items-center space-x-1 p-3 rounded-full">
-              
-                  <Link href={'/sign-in'} className="font-medium" aria-label="log-in">Log in</Link>
-               
+              <Link href={'/sign-in'} className="font-medium" aria-label="log-in">Log in</Link>
+              {isClerkConfigured ? (
                 <UserButton
                   appearance={{
                     elements: {
@@ -84,17 +83,15 @@ export default function Header() {
                       userButtonPopoverCard: "bg-green-500 border border-border",
                       userButtonPopoverActionButtonText: "text-foreground",
                       userButtonPopoverFooter: "hidden",
-
                     },
                   }}
                 />
-              
+              ) : null}
               <User className="w-5 h-5" />
             </div>
             <ModeToggle />
           </div>
         </div>
       </header>
-    </ClerkProvider>
   );
 }

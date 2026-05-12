@@ -9,13 +9,14 @@ import { Provider } from "react-redux";
 import { PersistGate } from 'redux-persist/integration/react';
 import {store, persistor} from "@/store/store";
 import { ClerkProvider } from "@clerk/nextjs";
+import { clerkPublishableKey, isClerkConfigured } from "@/lib/clerk-config";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <ClerkProvider>
+  const shell = (
     <html lang="en">
       <body>
         <Provider store={store}>
@@ -41,6 +42,15 @@ export default function RootLayout({
         </Provider>
       </body>
     </html>
+  );
+
+  if (!isClerkConfigured) {
+    return shell;
+  }
+
+  return (
+    <ClerkProvider publishableKey={clerkPublishableKey}>
+      {shell}
     </ClerkProvider>
   );
 }
