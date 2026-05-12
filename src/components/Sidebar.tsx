@@ -1,7 +1,7 @@
 "use client"; 
 import {  Home, Inbox, ShieldQuestion} from "lucide-react";
 import Link from "next/link";
-import {Sidebar,SidebarContent,SidebarGroup,SidebarGroupContent,SidebarGroupLabel,SidebarMenu,SidebarMenuButton,SidebarMenuItem,} from "@/components/ui/sidebar";
+import {Sidebar,SidebarContent,SidebarGroup,SidebarGroupContent,SidebarMenu,SidebarMenuButton,SidebarMenuItem,} from "@/components/ui/sidebar";
 
 const items = [
   { title: "Home", url: "/", icon: Home,},
@@ -13,11 +13,10 @@ const items = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarContent>
+      <SidebarContent className=" pt-16">
         <SidebarGroup>
-          <SidebarGroupLabel >Menu</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="pt-2 border-t border-gray-200 dark:border-gray-500">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>

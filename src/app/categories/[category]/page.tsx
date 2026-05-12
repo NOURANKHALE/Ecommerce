@@ -3,13 +3,13 @@ import ProductClient from "@/components/products/Productlist";
 
 // ✅ Local type definition — do not import it
 type CategoryPageProps = {
-  params: {
+  params: Promise<{
     category: string;
-  };
+  }>;
 };
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { category } = params;
+  const { category } = await params;
   const products = await getCategoryProducts(category);
 
   return (
