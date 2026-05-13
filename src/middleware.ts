@@ -1,18 +1,40 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import type { NextFetchEvent, NextRequest, NextMiddleware } from "next/server";
 
 /**
- * `clerkMiddleware()` needs valid Clerk env at runtime (especially
- * `CLERK_SECRET_KEY`). If either key is missing, Edge throws and Vercel shows
- * `MIDDLEWARE_INVOCATION_FAILED`. Skip Clerk until env is configured in Vercel.
+ * Clerk middleware needs both keys at runtime. Missing keys used to crash Edge
+ * (`MIDDLEWARE_INVOCATION_FAILED`). Wrong or mismatched keys can still throw
+ * on each request — we fall back to passthrough so the site stays up.
  */
 const isClerkMiddlewareReady =
   Boolean(process.env.CLERK_SECRET_KEY?.trim()) &&
   Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim());
 
-export default isClerkMiddlewareReady
-  ? clerkMiddleware()
-  : () => NextResponse.next();
+const passThrough = () => NextResponse.next();
+
+let clerkHandler: NextMiddleware | null = null;
+if (isClerkMiddlewareReady) {
+  try {
+    clerkHandler = clerkMiddleware();
+  } catch {
+    clerkHandler = null;
+  }
+}
+
+export default async function middleware(
+  request: NextRequest,
+  event: NextFetchEvent,
+) {
+  if (!clerkHandler) {
+    return passThrough();
+  }
+  try {
+    return await Promise.resolve(clerkHandler(request, event));
+  } catch {
+    return passThrough();
+  }
+}
 
 export const config = {
   matcher: [
@@ -20,5 +42,3 @@ export const config = {
     '/(api|trpc)(.*)',
   ],
 };
-
-
